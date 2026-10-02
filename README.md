@@ -1,4 +1,4 @@
-# </> CodeLoop
+# CodeLoop
 
 CodeLoop is a Python learning and practice web application designed to help beginners learn concepts, practice coding, understand their mistakes, and track their progress.
 
