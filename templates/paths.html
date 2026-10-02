@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Learning Paths | CodeLoop{% endblock %}
+
+{% block content %}
+
+<div class="page-intro">
+    <p class="eyebrow">LEARN</p>
+    <h1>Your learning paths</h1>
+    <p>Choose a path to continue learning.</p>
+</div>
+
+<div class="paths-page">
+
+    <section>
+        <div class="subsection-heading">
+            <div>
+                <h2>My paths</h2>
+                <p>
+                    {{ paths|length }}
+                    learning path{{ '' if paths|length == 1 else 's' }}
+                </p>
+            </div>
+        </div>
+
+        <div class="path-list">
+
+            {% for path in paths %}
+
+            <a
+                class="path-list-card"
+                href="{{ url_for('topics', path_id=path.id) }}"
+            >
+
+                <div class="path-icon">
+                    {{ path.name[:1]|upper }}
+                </div>
+
+                <div class="path-list-main">
+
+                    <div>
+                        <h3>{{ path.name }}</h3>
+
+                        <p>
+                            {{ path.topic_count }} topics ·
+                            {{ path.completed_count }} completed
+                        </p>
+                    </div>
+
+                    <span class="arrow">→</span>
+
+                </div>
+
+            </a>
+
+            {% else %}
+
+            <div class="empty-state">
+                <h3>No learning paths yet.</h3>
+                <p>Your built-in Python path should appear here.</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

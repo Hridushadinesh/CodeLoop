@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}Practice | CodeLoop{% endblock %}
+
+{% block content %}
+
+<div class="page-shell">
+
+    <div class="page-header">
+        <p class="eyebrow">CODING PRACTICE</p>
+        <h1>Practice Python</h1>
+        <p>
+            Solve coding problems from the topics you have learned.
+            Start with basic problems and move toward intermediate ones.
+        </p>
+    </div>
+
+    <!-- Practice progress -->
+    <div class="practice-progress-grid">
+
+        <div class="practice-progress-card featured">
+            <span>Solved</span>
+            <strong>{{ solved_count }}</strong>
+            <div class="practice-attempts">
+                out of {{ total_count }} problems
+            </div>
+        </div>
+
+        <div class="practice-progress-card">
+            <span>Attempted</span>
+            <strong>{{ attempted_count }}</strong>
+            <div class="practice-attempts">
+                problems tried so far
+            </div>
+        </div>
+
+        <div class="practice-progress-card">
+            <span>Not attempted</span>
+            <strong>{{ not_attempted_count }}</strong>
+            <div class="practice-attempts">
+                problems waiting for you
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Basic -->
+    <section class="practice-section">
+
+        <div class="section-heading">
+            <p class="eyebrow">LEVEL 1</p>
+            <h2>Basic Problems</h2>
+            <p>Good for strengthening your Python fundamentals.</p>
+        </div>
+
+        <div class="practice-problem-grid">
+
+            {% for slug, problem in problems.items() %}
+                {% if problem.difficulty == "Basic" %}
+
+                    {% set item = progress.get(slug, {"status": "not_attempted", "attempts": 0}) %}
+
+                    <a href="{{ url_for('practice_problem', slug=slug) }}"
+                       class="practice-problem-card">
+
+                        <div class="problem-number">
+                            {{ loop.index }}
+                        </div>
+
+                        <div class="problem-content">
+
+                            <span class="problem-level basic">
+                                Basic
+                            </span>
+
+                            <h3>{{ problem.title }}</h3>
+
+                            <p>
+                                {{ problem.prompt }}
+                            </p>
+
+                            <div class="problem-topics">
+                                {% for concept in problem.concepts.split(" • ") %}
+                                    <span>{{ concept }}</span>
+                                {% endfor %}
+                            </div>
+
+                            {% if item.status == "solved" %}
+                                <span class="practice-status solved">
+                                    ✓ Solved
+                                </span>
+                            {% elif item.status == "attempted" %}
+                                <span class="practice-status attempted">
+                                    Attempted
+                                </span>
+                            {% else %}
+                                <span class="practice-status not-attempted">
+                                    Not attempted
+                                </span>
+                            {% endif %}
+
+                            {% if item.attempts %}
+                                <div class="practice-attempts">
+                                    {{ item.attempts }} attempt{% if item.attempts != 1 %}s{% endif %}
+                                </div>
+                            {% endif %}
+
+                            <div class="practice-link">
+                                Solve problem →
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                {% endif %}
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    <!-- Intermediate -->
+    <section class="practice-section">
+
+        <div class="section-heading">
+            <p class="eyebrow">LEVEL 2</p>
+            <h2>Intermediate Problems</h2>
+            <p>Combine multiple Python concepts to solve larger problems.</p>
+        </div>
+
+        <div class="practice-problem-grid">
+
+            {% for slug, problem in problems.items() %}
+                {% if problem.difficulty == "Intermediate" %}
+
+                    {% set item = progress.get(slug, {"status": "not_attempted", "attempts": 0}) %}
+
+                    <a href="{{ url_for('practice_problem', slug=slug) }}"
+                       class="practice-problem-card">
+
+                        <div class="problem-number">
+                            {{ loop.index }}
+                        </div>
+
+                        <div class="problem-content">
+
+                            <span class="problem-level intermediate">
+                                Intermediate
+                            </span>
+
+                            <h3>{{ problem.title }}</h3>
+
+                            <p>
+                                {{ problem.prompt }}
+                            </p>
+
+                            <div class="problem-topics">
+                                {% for concept in problem.concepts.split(" • ") %}
+                                    <span>{{ concept }}</span>
+                                {% endfor %}
+                            </div>
+
+                            {% if item.status == "solved" %}
+                                <span class="practice-status solved">
+                                    ✓ Solved
+                                </span>
+                            {% elif item.status == "attempted" %}
+                                <span class="practice-status attempted">
+                                    Attempted
+                                </span>
+                            {% else %}
+                                <span class="practice-status not-attempted">
+                                    Not attempted
+                                </span>
+                            {% endif %}
+
+                            {% if item.attempts %}
+                                <div class="practice-attempts">
+                                    {{ item.attempts }} attempt{% if item.attempts != 1 %}s{% endif %}
+                                </div>
+                            {% endif %}
+
+                            <div class="practice-link">
+                                Solve problem →
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                {% endif %}
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

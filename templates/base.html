@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>
+        {% block title %}CodeLoop{% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-brand">
+
+            <a href="{{ url_for('home') }}">
+
+                <span class="brand-mark">&lt;/&gt;</span>
+
+                <span>
+                    CodeLoop
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+        <nav class="sidebar-nav">
+
+            <p class="nav-label">
+                Workspace
+            </p>
+
+
+            <a
+                class="nav-link {% if request.endpoint == 'home' %}active{% endif %}"
+                href="{{ url_for('home') }}"
+            >
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+
+            <a
+                class="nav-link {% if request.endpoint in ['paths', 'topics', 'topic_detail'] %}active{% endif %}"
+                href="{{ url_for('paths') }}"
+            >
+                <span>▣</span>
+                Learn
+            </a>
+
+
+            <a
+                class="nav-link {% if request.endpoint == 'practice' %}active{% endif %}"
+                href="{{ url_for('practice') }}"
+            >
+                <span>⌘</span>
+                Practice
+            </a>
+
+
+            <a
+                class="nav-link {% if request.endpoint == 'confusing_parts' %}active{% endif %}"
+                href="{{ url_for('confusing_parts') }}"
+            >
+                <span>?</span>
+                Confusing Parts
+            </a>
+
+
+            <a
+                class="nav-link {% if request.endpoint == 'mistakes' %}active{% endif %}"
+                href="{{ url_for('mistakes') }}"
+            >
+                <span>!</span>
+                My mistakes
+            </a>
+
+
+            <a
+                class="nav-link {% if request.endpoint == 'progress' %}active{% endif %}"
+                href="{{ url_for('progress') }}"
+            >
+                <span>↗</span>
+                Progress
+            </a>
+
+        </nav>
+
+
+        <!-- SIDEBAR FOOTER -->
+        <div class="sidebar-footer">
+
+            <div class="sidebar-tip">
+
+                <span class="tip-icon">
+                    ✦
+                </span>
+
+                <div>
+
+                    <strong>
+                        Keep learning
+                    </strong>
+
+                    <p>
+                        Small progress still counts.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN AREA -->
+    <div class="main-area">
+
+        <!-- TOP HEADER -->
+        <header class="topbar">
+
+            <!-- Mobile menu button -->
+            <button
+                class="menu-button"
+                id="menuButton"
+                type="button"
+                aria-label="Open menu"
+                aria-expanded="false"
+            >
+                ☰
+            </button>
+
+
+            <!-- BRAND -->
+            <a
+                class="topbar-brand"
+                href="{{ url_for('home') }}"
+            >
+
+                <span class="topbar-logo">
+                    &lt;/&gt;
+                </span>
+
+                <span class="topbar-brand-text">
+
+                    <span class="topbar-brand-name">
+                        CodeLoop
+                    </span>
+
+                    <span class="topbar-brand-subtitle">
+                        Learn • Practice • Improve
+                    </span>
+
+                </span>
+
+            </a>
+
+
+            <!-- HEADER NAVIGATION -->
+            <nav class="topbar-links">
+
+                <a
+                    class="topbar-link"
+                    href="{{ url_for('home') }}"
+                >
+                    ⌂ Home
+                </a>
+
+
+                <a
+                    class="topbar-link"
+                    href="{{ url_for('paths') }}"
+                >
+                    ▣ Learn
+                </a>
+
+
+                <a
+                    class="topbar-link"
+                    href="{{ url_for('practice') }}"
+                >
+                    ⌘ Practice
+                </a>
+
+
+                <a
+                    class="topbar-link"
+                    href="{{ url_for('confusing_parts') }}"
+                >
+                    ? Confusing Parts
+                </a>
+
+
+                <a
+                    class="topbar-link"
+                    href="{{ url_for('mistakes') }}"
+                >
+                    ! Mistakes
+                </a>
+
+
+                <a
+                    class="topbar-link"
+                    href="{{ url_for('progress') }}"
+                >
+                    ↗ Progress
+                </a>
+
+            </nav>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+        <main class="page-shell">
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- MOBILE OVERLAY -->
+<div
+    class="mobile-overlay"
+    id="mobileOverlay"
+></div>
+
+<footer class="site-footer">
+
+    <div class="footer-top">
+        <div class="footer-brand">
+            <div class="footer-logo">&lt;/&gt;</div>
+
+            <div>
+                <h2>CodeLoop</h2>
+                <p>
+                    Learn Python step by step, practice what you learn,
+                    and understand your mistakes.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-columns">
+
+        <div class="footer-column">
+            <h3>PYTHON BASICS</h3>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Variables') }}">
+                Variables
+            </a>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Data Types') }}">
+                Data Types
+            </a>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Input and Output') }}">
+                Input &amp; Output
+            </a>
+        </div>
+
+
+        <div class="footer-column">
+            <h3>CONTROL FLOW</h3>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Conditions') }}">
+                Conditions
+            </a>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Loops') }}">
+                Loops
+            </a>
+        </div>
+
+
+        <div class="footer-column">
+            <h3>DATA STRUCTURES</h3>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Lists') }}">
+                Lists
+            </a>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Dictionaries') }}">
+                Dictionaries
+            </a>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Sets and Tuples') }}">
+                Sets &amp; Tuples
+            </a>
+        </div>
+
+
+        <div class="footer-column">
+            <h3>FUNCTIONS &amp; OOP</h3>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Defining Functions') }}">
+                Defining Functions
+            </a>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Return Values') }}">
+                Return Values
+            </a>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Classes and Objects') }}">
+                Classes &amp; Objects
+            </a>
+
+            <a href="{{ url_for('python_topic_link', topic_name='Methods and Attributes') }}">
+                Methods &amp; Attributes
+            </a>
+        </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+
+        <span>
+            CodeLoop · Python Learning
+        </span>
+
+        <div class="footer-bottom-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('practice') }}">Practice</a>
+            <a href="{{ url_for('confusing_parts') }}">Confusing Parts</a>
+            <a href="{{ url_for('mistakes') }}">My Mistakes</a>
+            <a href="{{ url_for('progress') }}">Progress</a>
+        </div>
+
+    </div>
+
+</footer>
+<!-- MENU JAVASCRIPT -->
+<script>
+
+
+const menuButton =
+    document.getElementById("menuButton");
+
+const sidebar =
+    document.getElementById("sidebar");
+
+const overlay =
+    document.getElementById("mobileOverlay");
+
+
+function toggleMenu() {
+
+    const open =
+        sidebar.classList.toggle("open");
+
+    overlay.classList.toggle(
+        "show",
+        open
+    );
+
+    menuButton.setAttribute(
+        "aria-expanded",
+        open ? "true" : "false"
+    );
+}
+
+
+/* Open / close menu */
+
+menuButton.addEventListener(
+    "click",
+    toggleMenu
+);
+
+
+/* Close menu when clicking overlay */
+
+overlay.addEventListener(
+    "click",
+    toggleMenu
+);
+
+
+/* Close menu after selecting sidebar item */
+
+document
+    .querySelectorAll(".sidebar .nav-link")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                sidebar.classList.remove(
+                    "open"
+                );
+
+                overlay.classList.remove(
+                    "show"
+                );
+
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+        );
+
+    });
+
+</script>
+
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+
+</html>

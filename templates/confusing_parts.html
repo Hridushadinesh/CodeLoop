@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Confusing Parts{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Confusing Parts</h1>
+    <p>Small Python concepts that are easy to mix up.</p>
+</div>
+
+<div class="topic-grid">
+
+    {% for item in confusing_parts %}
+
+    <a href="{{ url_for('confusing_part_detail', part=item.title) }}" class="topic-card">
+
+        <div class="topic-card-content">
+
+            <h2>{{ item.title }}</h2>
+
+            <p class="topic-subtitle">
+                {{ item.subtitle }}
+            </p>
+
+            <p class="topic-description">
+                {{ item.description }}
+            </p>
+
+            <span class="topic-action">
+                Explore →
+            </span>
+
+        </div>
+
+    </a>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

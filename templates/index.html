@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}CodeLoop | Learning Tracker{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">YOUR LEARNING SPACE</p>
+        <h1>Keep learning.<br><span>Keep improving.</span></h1>
+        <p class="hero-copy">Learn concepts, practice them in code, and keep track of the mistakes that help you improve.</p>
+    </div>
+    <a class="primary-button" href="{{ url_for('paths') }}">Continue learning <span>→</span></a>
+</section>
+
+<section class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-label">Learning paths</span>
+        <strong>{{ paths|length }}</strong>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Completed topics</span>
+        <strong>{{ totals.completed_count }}</strong>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Currently learning</span>
+        <strong>{{ totals.learning_count }}</strong>
+    </div>
+    <div class="stat-card featured">
+        <span class="stat-label">Overall progress</span>
+        <strong>{{ overall_progress }}%</strong>
+        <div class="mini-track"><div style="width: {{ overall_progress }}%"></div></div>
+    </div>
+</section>
+
+<div class="section-title-row">
+    <div>
+        <p class="eyebrow">YOUR CURRICULUM</p>
+        <h2>Learning paths</h2>
+    </div>
+    <a class="text-link" href="{{ url_for('paths') }}">View all →</a>
+</div>
+
+<div class="path-grid">
+{% for path in paths %}
+    <a class="path-card" href="{{ url_for('topics', path_id=path.id) }}">
+        <div class="path-icon">{{ path.name[:1]|upper }}</div>
+        <div class="path-card-content">
+            <div class="path-card-top">
+                <h3>{{ path.name }}</h3>
+                <span>{{ path.completed_count }}/{{ path.topic_count }}</span>
+            </div>
+            <p>{{ path.topic_count }} topics in this learning path.</p>
+            <div class="progress-track">
+                <div class="progress-fill" style="width: {{ (path.completed_count / path.topic_count * 100) if path.topic_count else 0 }}%"></div>
+            </div>
+            <div class="path-card-bottom">
+                <span>{{ ((path.completed_count / path.topic_count * 100)|round|int) if path.topic_count else 0 }}% complete</span>
+                <span>Open →</span>
+            </div>
+        </div>
+    </a>
+{% endfor %}
+</div>
+
+<div class="quick-grid">
+    <a href="{{ url_for('practice') }}" class="quick-card">
+        <span class="quick-icon">⌘</span>
+        <div><strong>Practice</strong><p>Write code and test what you learned.</p></div>
+        <span>→</span>
+    </a>
+    <a href="{{ url_for('mistakes') }}" class="quick-card">
+        <span class="quick-icon warning">!</span>
+        <div><strong>Review mistakes</strong><p>Turn mistakes into learning material.</p></div>
+        <span>→</span>
+    </a>
+</div>
+{% endblock %}

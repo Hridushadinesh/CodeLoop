@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}{{ path.name }} | CodeLoop{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{{ url_for('paths') }}">← Learning paths</a>
+
+<section class="path-hero">
+    <div>
+        <p class="eyebrow">LEARNING PATH</p>
+        <h1>{{ path.name }}</h1>
+        <p>Work through each topic, practice what you learn, and mark your progress.</p>
+    </div>
+
+    <div class="progress-summary">
+        <strong>{{ progress }}%</strong>
+        <span>complete</span>
+
+        <div class="progress-track">
+            <div
+                class="progress-fill"
+                style="width: {{ progress }}%"
+            ></div>
+        </div>
+    </div>
+</section>
+
+
+<section class="topic-layout">
+
+    <div class="topics-full-width">
+
+        {% set section = namespace(name='') %}
+
+        {% for topic in topics %}
+
+            {% if topic.section != section.name %}
+                {% set section.name = topic.section %}
+                <h2 class="topic-section">{{ topic.section }}</h2>
+            {% endif %}
+
+            <div class="topic-row">
+
+                <a
+                    href="{{ url_for('topic_detail', topic_id=topic.id) }}"
+                    class="topic-main"
+                >
+
+                    <span class="status-dot status-{{ topic.status }}"></span>
+
+                    <div>
+                        <strong>{{ topic.name }}</strong>
+                        <span>{{ topic.status.replace('_', ' ')|title }}</span>
+                    </div>
+
+                </a>
+
+
+                <form
+                    method="post"
+                    action="{{ url_for('update_topic_status', topic_id=topic.id) }}"
+                >
+
+                    <label
+                        class="sr-only"
+                        for="status-{{ topic.id }}"
+                    >
+                        Status for {{ topic.name }}
+                    </label>
+
+                    <select
+                        id="status-{{ topic.id }}"
+                        name="status"
+                        onchange="this.form.submit()"
+                    >
+
+                        <option
+                            value="not_started"
+                            {% if topic.status == 'not_started' %}selected{% endif %}
+                        >
+                            Not started
+                        </option>
+
+                        <option
+                            value="learning"
+                            {% if topic.status == 'learning' %}selected{% endif %}
+                        >
+                            Learning
+                        </option>
+
+                        <option
+                            value="completed"
+                            {% if topic.status == 'completed' %}selected{% endif %}
+                        >
+                            Completed
+                        </option>
+
+                    </select>
+
+                </form>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

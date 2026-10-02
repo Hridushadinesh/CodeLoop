@@ -1,0 +1,738 @@
+{% extends "base.html" %}
+
+{% block title %}{{ part }}{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>{{ part }}</h1>
+
+    <p>
+        Understand the difference by seeing what Python actually does.
+    </p>
+</div>
+
+
+<div class="confusing-sections">
+
+
+    <!-- =====================================================
+         = vs ==
+         ===================================================== -->
+
+    {% if part == "= vs ==" %}
+
+    <div class="confusing-box">
+
+        <h2>Assignment</h2>
+
+        <p>
+            The single equals sign is used to
+            <strong>store a value</strong> in a variable.
+        </p>
+
+        <pre><code>age = 20</code></pre>
+
+        <p>
+            Python stores the value
+            <strong>20</strong> inside the variable
+            <strong>age</strong>.
+        </p>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Comparison</h2>
+
+        <p>
+            The double equals sign is used to
+            <strong>check whether two values are equal</strong>.
+        </p>
+
+        <pre><code>age == 20</code></pre>
+
+        <p>
+            Python checks whether the value stored in
+            <strong>age</strong> is equal to
+            <strong>20</strong>.
+        </p>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Try it yourself</h2>
+
+        <pre><code>age = 20
+print(age == 20)</code></pre>
+
+        <h3>What do you think Python will print?</h3>
+
+        <p>
+            Type your prediction before seeing the result.
+        </p>
+
+        <input
+            type="text"
+            id="prediction"
+            placeholder="Example: True"
+            class="confusing-answer"
+        >
+
+        <button
+            type="button"
+            class="confusing-button"
+            onclick="checkPrediction('True', 'age = 20 stores the value 20. Then age == 20 checks whether age contains 20. Since they are equal, Python produces True.')"
+        >
+            Submit prediction
+        </button>
+
+        <div id="prediction-result" class="prediction-result"></div>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Remember</h2>
+
+        <p>
+            <strong>=</strong> → store a value
+        </p>
+
+        <p>
+            <strong>==</strong> → check whether values are equal
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         append() vs extend()
+         ===================================================== -->
+
+    {% elif part == "append() vs extend()" %}
+
+    <div class="confusing-box">
+
+        <h2>append()</h2>
+
+        <h3>Add one item</h3>
+
+        <p>
+            <strong>append()</strong> adds one item to the end of a list.
+        </p>
+
+        <pre><code>numbers = [1, 2]
+numbers.append(3)</code></pre>
+
+        <p>
+            The list becomes:
+        </p>
+
+        <pre><code>[1, 2, 3]</code></pre>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>extend()</h2>
+
+        <h3>Add items from another iterable</h3>
+
+        <p>
+            <strong>extend()</strong> adds the items from another iterable
+            to the list.
+        </p>
+
+        <pre><code>numbers = [1, 2]
+numbers.extend([3, 4])</code></pre>
+
+        <p>
+            The list becomes:
+        </p>
+
+        <pre><code>[1, 2, 3, 4]</code></pre>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Try it yourself</h2>
+
+        <pre><code>numbers = [1, 2]
+numbers.append([3, 4])
+print(numbers)</code></pre>
+
+        <h3>What do you think Python will print?</h3>
+
+        <input
+            type="text"
+            id="prediction"
+            placeholder="Type your prediction"
+            class="confusing-answer"
+        >
+
+        <button
+            type="button"
+            class="confusing-button"
+            onclick="checkPrediction('[1, 2, [3, 4]]', 'append() adds [3, 4] as one item. It does not take the individual values out of that list.')"
+        >
+            Submit prediction
+        </button>
+
+        <div id="prediction-result" class="prediction-result"></div>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Remember</h2>
+
+        <p>
+            <strong>append()</strong> → adds one item
+        </p>
+
+        <p>
+            <strong>extend()</strong> → adds items from another iterable
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         remove() vs pop()
+         ===================================================== -->
+
+    {% elif part == "remove() vs pop()" %}
+
+    <div class="confusing-box">
+
+        <h2>remove()</h2>
+
+        <h3>Remove by value</h3>
+
+        <p>
+            <strong>remove()</strong> searches for a value and removes it.
+        </p>
+
+        <pre><code>numbers = [10, 20, 30]
+numbers.remove(20)</code></pre>
+
+        <p>
+            The value <strong>20</strong> is removed.
+        </p>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>pop()</h2>
+
+        <h3>Remove by position</h3>
+
+        <p>
+            <strong>pop()</strong> removes an item using its index.
+        </p>
+
+        <pre><code>numbers = [10, 20, 30]
+numbers.pop(1)</code></pre>
+
+        <p>
+            Index <strong>1</strong> refers to the second item,
+            which is <strong>20</strong>.
+        </p>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Try it yourself</h2>
+
+        <pre><code>numbers = [10, 20, 30]
+removed = numbers.pop(1)
+
+print(removed)
+print(numbers)</code></pre>
+
+        <h3>What do you think Python will print?</h3>
+
+        <input
+            type="text"
+            id="prediction"
+            placeholder="Type your prediction"
+            class="confusing-answer"
+        >
+
+        <button
+            type="button"
+            class="confusing-button"
+            onclick="checkPrediction('20 and [10, 30]', 'pop(1) removes the item at index 1 and returns that removed value. The remaining list is [10, 30].')"
+        >
+            Submit prediction
+        </button>
+
+        <div id="prediction-result" class="prediction-result"></div>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Remember</h2>
+
+        <p>
+            <strong>remove()</strong> → uses a value
+        </p>
+
+        <p>
+            <strong>pop()</strong> → uses an index
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         break vs continue
+         ===================================================== -->
+
+    {% elif part == "break vs continue" %}
+
+    <div class="confusing-box">
+
+        <h2>break</h2>
+
+        <h3>Stop the loop</h3>
+
+        <p>
+            <strong>break</strong> immediately stops the loop.
+        </p>
+
+        <pre><code>for number in range(5):
+    if number == 2:
+        break
+    print(number)</code></pre>
+
+        <p>
+            When the number becomes 2, the loop stops completely.
+        </p>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>continue</h2>
+
+        <h3>Skip the current iteration</h3>
+
+        <p>
+            <strong>continue</strong> skips the current iteration
+            and moves to the next one.
+        </p>
+
+        <pre><code>for number in range(5):
+    if number == 2:
+        continue
+    print(number)</code></pre>
+
+        <p>
+            When the number is 2, that iteration is skipped,
+            but the loop continues.
+        </p>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Try it yourself</h2>
+
+        <pre><code>for number in range(5):
+    if number == 2:
+        continue
+    print(number)</code></pre>
+
+        <h3>What do you think Python will print?</h3>
+
+        <input
+            type="text"
+            id="prediction"
+            placeholder="Type your prediction"
+            class="confusing-answer"
+        >
+
+        <button
+            type="button"
+            class="confusing-button"
+            onclick="checkPrediction('0 1 3 4', 'When number is 2, continue skips that iteration. The loop then continues with 3 and 4.')"
+        >
+            Submit prediction
+        </button>
+
+        <div id="prediction-result" class="prediction-result"></div>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Remember</h2>
+
+        <p>
+            <strong>break</strong> → stops the loop
+        </p>
+
+        <p>
+            <strong>continue</strong> → skips one iteration
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         list vs tuple
+         ===================================================== -->
+
+    {% elif part == "list vs tuple" %}
+
+    <div class="confusing-box">
+
+        <h2>List</h2>
+
+        <h3>Changeable</h3>
+
+        <p>
+            A list can be changed after it is created.
+        </p>
+
+        <pre><code>numbers = [1, 2, 3]
+numbers[0] = 10</code></pre>
+
+        <p>
+            The list becomes:
+        </p>
+
+        <pre><code>[10, 2, 3]</code></pre>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Tuple</h2>
+
+        <h3>Fixed</h3>
+
+        <p>
+            A tuple cannot have its individual values changed
+            after it is created.
+        </p>
+
+        <pre><code>numbers = (1, 2, 3)</code></pre>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Try it yourself</h2>
+
+        <pre><code>numbers = (1, 2, 3)
+numbers[0] = 10
+print(numbers)</code></pre>
+
+        <h3>What do you think Python will do?</h3>
+
+        <input
+            type="text"
+            id="prediction"
+            placeholder="Type your prediction"
+            class="confusing-answer"
+        >
+
+        <button
+            type="button"
+            class="confusing-button"
+            onclick="checkPrediction('Error', 'Tuples are not changeable in this way. Trying to assign a new value to one of their positions produces an error.')"
+        >
+            Submit prediction
+        </button>
+
+        <div id="prediction-result" class="prediction-result"></div>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Remember</h2>
+
+        <p>
+            <strong>List</strong> → changeable
+        </p>
+
+        <p>
+            <strong>Tuple</strong> → fixed
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         List methods vs String methods
+         ===================================================== -->
+
+    {% elif part == "List methods vs String methods" %}
+
+    <div class="confusing-box">
+
+        <h2>List methods</h2>
+
+        <h3>Methods that work with lists</h3>
+
+        <p>
+            List methods are methods that we can use to work with
+            items inside a list.
+        </p>
+
+
+        <h3>append()</h3>
+
+        <p>
+            Adds one item to the end of a list.
+        </p>
+
+        <pre><code>numbers = [1, 2]
+numbers.append(3)
+
+print(numbers)</code></pre>
+
+        <p>Output:</p>
+
+        <pre><code>[1, 2, 3]</code></pre>
+
+
+        <h3>remove()</h3>
+
+        <p>
+            Removes a specific value from a list.
+        </p>
+
+        <pre><code>numbers = [10, 20, 30]
+numbers.remove(20)
+
+print(numbers)</code></pre>
+
+        <p>Output:</p>
+
+        <pre><code>[10, 30]</code></pre>
+
+
+        <h3>sort()</h3>
+
+        <p>
+            Arranges the items of a list in ascending order.
+        </p>
+
+        <pre><code>numbers = [3, 1, 2]
+numbers.sort()
+
+print(numbers)</code></pre>
+
+        <p>Output:</p>
+
+        <pre><code>[1, 2, 3]</code></pre>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>String methods</h2>
+
+        <h3>Methods that work with strings</h3>
+
+        <p>
+            String methods are methods that we can use to work with
+            text.
+        </p>
+
+
+        <h3>upper()</h3>
+
+        <p>
+            Converts letters to uppercase.
+        </p>
+
+        <pre><code>name = "python"
+print(name.upper())</code></pre>
+
+        <p>Output:</p>
+
+        <pre><code>PYTHON</code></pre>
+
+
+        <h3>lower()</h3>
+
+        <p>
+            Converts letters to lowercase.
+        </p>
+
+        <pre><code>name = "PYTHON"
+print(name.lower())</code></pre>
+
+        <p>Output:</p>
+
+        <pre><code>python</code></pre>
+
+
+        <h3>strip()</h3>
+
+        <p>
+            Removes spaces from the beginning and end of a string.
+        </p>
+
+        <pre><code>name = "  Python  "
+print(name.strip())</code></pre>
+
+        <p>Output:</p>
+
+        <pre><code>Python</code></pre>
+
+
+        <h3>split()</h3>
+
+        <p>
+            Splits a string into smaller parts and gives you a list.
+        </p>
+
+        <pre><code>sentence = "I love Python"
+print(sentence.split())</code></pre>
+
+        <p>Output:</p>
+
+        <pre><code>['I', 'love', 'Python']</code></pre>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Try it yourself</h2>
+
+        <pre><code>name = "python"
+name.append("!")</code></pre>
+
+        <h3>What do you think Python will do?</h3>
+
+        <input
+            type="text"
+            id="prediction"
+            placeholder="Type your prediction"
+            class="confusing-answer"
+        >
+
+        <button
+            type="button"
+            class="confusing-button"
+            onclick="checkPrediction('Error', 'name contains a string. append() is a list method, so it is not available for a string.')"
+        >
+            Submit prediction
+        </button>
+
+        <div id="prediction-result" class="prediction-result"></div>
+
+    </div>
+
+
+    <div class="confusing-box">
+
+        <h2>Remember</h2>
+
+        <p>
+            Before using a method, ask:
+        </p>
+
+        <p>
+            <strong>What type of object am I working with?</strong>
+        </p>
+
+    </div>
+
+
+    {% else %}
+
+    <div class="confusing-box">
+
+        <h2>Confusing part not found</h2>
+
+        <p>
+            This confusing part does not exist.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+function checkPrediction(answer, explanation) {
+
+    const prediction =
+        document.getElementById("prediction").value.trim();
+
+    const result =
+        document.getElementById("prediction-result");
+
+
+    if (prediction === "") {
+
+        result.innerHTML = `
+            <p>
+                Please enter your prediction first.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    result.innerHTML = `
+
+        <div class="prediction-answer">
+
+            <h3>What Python actually does</h3>
+
+            <pre><code>${answer}</code></pre>
+
+            <p>
+                Your prediction was:
+                <strong>${prediction}</strong>
+            </p>
+
+            <h3>Why?</h3>
+
+            <p>
+                ${explanation}
+            </p>
+
+        </div>
+
+    `;
+}
+
+</script>
+
+{% endblock %}

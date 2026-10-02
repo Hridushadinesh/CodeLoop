@@ -1,0 +1,941 @@
+{% extends "base.html" %}
+
+{% block title %}{{ problem.title }} | Practice{% endblock %}
+
+{% block content %}
+
+<a class="back-link" href="{{ url_for('practice') }}">
+    ← Back to Practice
+</a>
+
+
+<section class="practice-problem-page">
+
+    <!-- =====================================================
+         PROBLEM HEADER
+    ====================================================== -->
+
+    <section class="practice-problem-header">
+
+        <span class="problem-level
+            {% if problem.difficulty == 'Basic' %}
+                basic
+            {% else %}
+                intermediate
+            {% endif %}
+        ">
+            {{ problem.difficulty }}
+        </span>
+
+
+        <p class="eyebrow">
+            PYTHON CODING PROBLEM
+        </p>
+
+
+        <h1>
+            {{ problem.title }}
+        </h1>
+
+
+        <p class="problem-description">
+            {{ problem.prompt }}
+        </p>
+
+
+        <div class="problem-topics">
+
+            {% for concept in problem.concepts.split(" • ") %}
+
+                <span>
+                    {{ concept }}
+                </span>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         YOUR TASK
+    ====================================================== -->
+
+    <section class="learning-card">
+
+        <p class="eyebrow">
+            YOUR TASK
+        </p>
+
+
+        <h2>
+            What should your program do?
+        </h2>
+
+
+        <p class="problem-question">
+            {{ problem.prompt }}
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CODE EDITOR
+    ====================================================== -->
+
+    <section class="practice-panel">
+
+        <div class="practice-heading">
+
+            <div>
+
+                <p class="eyebrow">
+                    WRITE YOUR CODE
+                </p>
+
+
+                <h2>
+                    Try it yourself
+                </h2>
+
+
+                <p>
+                    Write your solution below.
+                    The editor starts empty.
+                </p>
+
+            </div>
+
+
+            <span class="practice-badge">
+                Python
+            </span>
+
+        </div>
+
+
+
+        <!-- CODE -->
+
+        <textarea
+            id="code-editor"
+            class="code-editor"
+            spellcheck="false"
+            placeholder="# Write your Python code here..."
+        ></textarea>
+
+
+
+        <!-- RUN BUTTON -->
+
+        <div class="editor-actions">
+
+            <button
+                class="primary-button"
+                type="button"
+                id="runButton"
+            >
+                Run code <span>▶</span>
+            </button>
+
+
+            <span
+                id="run-result"
+                class="run-result"
+                role="status"
+            ></span>
+
+        </div>
+
+
+
+        <!-- RESULT -->
+
+        <div class="output-heading">
+
+            <p class="eyebrow">
+                RESULT
+            </p>
+
+        </div>
+
+
+        <pre
+            id="output"
+            class="output-box"
+        ><code>Run your code to see the result.</code></pre>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         DEBUG YOUR THINKING
+    ====================================================== -->
+
+    <section
+        class="practice-panel"
+        id="debugReflection"
+        hidden
+    >
+
+        <div class="debug-reflection-heading">
+
+            <p class="eyebrow">
+                DEBUG YOUR THINKING
+            </p>
+
+
+            <h2>
+                Explain your thinking first.
+            </h2>
+
+
+            <p>
+                Before seeing the correct solution,
+                tell us what you were trying to do
+                and what you expected.
+            </p>
+
+        </div>
+
+
+
+        <form id="debugForm">
+
+            <label for="thought">
+                What were you trying to do?
+            </label>
+
+
+            <textarea
+                id="thought"
+                name="thought"
+                placeholder="Explain what you were trying to make your program do..."
+                required
+            ></textarea>
+
+
+
+            <label for="expected-thought">
+                What did you expect to happen?
+            </label>
+
+
+            <textarea
+                id="expected-thought"
+                name="expected_thought"
+                placeholder="Explain what you expected your program to produce..."
+                required
+            ></textarea>
+
+
+
+            <button
+                class="primary-button"
+                type="submit"
+            >
+                Check my thinking →
+            </button>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         DEBUG RESULT
+    ====================================================== -->
+
+    <section
+        class="practice-panel"
+        id="debugResult"
+        hidden
+    >
+
+        <div class="debug-result-header">
+
+            <span class="debug-result-icon">
+                ?
+            </span>
+
+
+            <div>
+
+                <p class="eyebrow">
+                    WHAT WE FOUND
+                </p>
+
+
+                <h2 id="debugTitle">
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Explanation -->
+
+        <p id="debugExplanation">
+        </p>
+
+
+
+        <!-- Why -->
+
+        <div class="debug-why">
+
+            <strong>
+                Why this happened
+            </strong>
+
+
+            <p id="debugWhy">
+            </p>
+
+        </div>
+
+
+
+        <!-- Concept -->
+
+        <div class="debug-concept">
+
+            <span>
+                Concept to review
+            </span>
+
+
+            <strong id="debugConcept">
+            </strong>
+
+        </div>
+
+
+
+        <!-- SHOW ANSWER -->
+
+        <button
+            class="secondary-button"
+            type="button"
+            id="showAnswerButton"
+        >
+            Show correct answer
+        </button>
+
+
+
+        <!-- CORRECT ANSWER -->
+
+        <div
+            id="correctAnswer"
+            hidden
+        >
+
+            <p class="eyebrow">
+                CORRECT APPROACH
+            </p>
+
+
+            <pre><code id="solutionCode"></code></pre>
+
+
+            <p id="solutionExplanation">
+            </p>
+
+        </div>
+
+
+
+        <!-- SAVE MISTAKE -->
+
+        <button
+            class="secondary-button"
+            type="button"
+            id="saveMistakeButton"
+        >
+            Save this mistake
+        </button>
+
+
+        <span
+            class="save-status"
+            id="saveStatus"
+            role="status"
+        ></span>
+
+    </section>
+
+</section>
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script>
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let lastRun = {
+    code: "",
+    output: "",
+    passed: false
+};
+
+let debugData = null;
+
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const codeEditor =
+    document.getElementById("code-editor");
+
+const output =
+    document.getElementById("output");
+
+const runButton =
+    document.getElementById("runButton");
+
+const runResult =
+    document.getElementById("run-result");
+
+const reflection =
+    document.getElementById("debugReflection");
+
+const debugForm =
+    document.getElementById("debugForm");
+
+const debugResult =
+    document.getElementById("debugResult");
+
+const showAnswerButton =
+    document.getElementById("showAnswerButton");
+
+const correctAnswer =
+    document.getElementById("correctAnswer");
+
+const solutionCode =
+    document.getElementById("solutionCode");
+
+const solutionExplanation =
+    document.getElementById("solutionExplanation");
+
+const saveMistakeButton =
+    document.getElementById("saveMistakeButton");
+
+const saveStatus =
+    document.getElementById("saveStatus");
+
+
+
+/* =========================================================
+   RUN CODE
+========================================================= */
+
+runButton.addEventListener(
+    "click",
+    async function () {
+
+        const code =
+            codeEditor.value;
+
+
+        /* Empty editor */
+
+        if (!code.trim()) {
+
+            runResult.textContent =
+                "Write some Python code first.";
+
+            return;
+        }
+
+
+        runResult.textContent =
+            "Running...";
+
+
+        output.textContent =
+            "Running your program...";
+
+
+        /* -------------------------------------------------
+           Send FORM DATA
+           Flask uses request.form
+        ------------------------------------------------- */
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "code",
+            code
+        );
+
+
+        try {
+
+            /*
+             * Current URL:
+             *
+             * /practice/sum-of-digits
+             *
+             * becomes:
+             *
+             * /practice/sum-of-digits/run
+             */
+
+            const response =
+                await fetch(
+                    window.location.pathname + "/run",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            /* Server error */
+
+            if (!response.ok) {
+
+                runResult.textContent =
+                    data.error ||
+                    "Could not run the code.";
+
+                output.textContent =
+                    data.error ||
+                    "An error occurred.";
+
+                return;
+            }
+
+
+            /* Show actual output */
+
+            output.textContent =
+                data.output ||
+                "(no output)";
+
+
+            /* Save run */
+
+            lastRun = {
+
+                code: code,
+
+                output:
+                    data.output || "",
+
+                passed:
+                    data.passed
+
+            };
+
+
+            /* -------------------------------------------------
+               PASSED
+            ------------------------------------------------- */
+
+            if (data.passed) {
+
+                runResult.textContent =
+                    "Practice passed ✓";
+
+
+                runResult.classList.add(
+                    "success"
+                );
+
+
+                reflection.hidden =
+                    true;
+
+
+                debugResult.hidden =
+                    true;
+
+            }
+
+
+            /* -------------------------------------------------
+               FAILED
+            ------------------------------------------------- */
+
+            else {
+
+                runResult.textContent =
+                    "Your program did not match the expected result.";
+
+
+                runResult.classList.remove(
+                    "success"
+                );
+
+
+                reflection.hidden =
+                    false;
+
+
+                debugResult.hidden =
+                    true;
+
+            }
+
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+
+            output.textContent =
+                "Could not connect to the server.";
+
+
+            runResult.textContent =
+                "Something went wrong.";
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   DEBUG YOUR THINKING
+========================================================= */
+
+debugForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        if (!lastRun.code) {
+
+            return;
+
+        }
+
+
+        const thought =
+            document.getElementById(
+                "thought"
+            ).value;
+
+
+        const expectedThought =
+            document.getElementById(
+                "expected-thought"
+            ).value;
+
+
+        /* -------------------------------------------------
+           Send FORM DATA
+        ------------------------------------------------- */
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "code",
+            lastRun.code
+        );
+
+
+        formData.append(
+            "output",
+            lastRun.output
+        );
+
+
+        formData.append(
+            "thought",
+            thought
+        );
+
+
+        formData.append(
+            "expected_thought",
+            expectedThought
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    window.location.pathname + "/analyze",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                alert(
+                    data.error ||
+                    "Could not analyze your thinking."
+                );
+
+                return;
+            }
+
+
+            /* Save analysis */
+
+            debugData =
+                data;
+
+
+            /* Title */
+
+            document.getElementById(
+                "debugTitle"
+            ).textContent =
+                data.title ||
+                "Let's understand the mistake";
+
+
+            /* Explanation */
+
+            document.getElementById(
+                "debugExplanation"
+            ).textContent =
+                data.explanation ||
+                "";
+
+
+            /* Why */
+
+            document.getElementById(
+                "debugWhy"
+            ).textContent =
+                data.why ||
+                "";
+
+
+            /* Concept */
+
+            document.getElementById(
+                "debugConcept"
+            ).textContent =
+                data.concept ||
+                "";
+
+
+            /* Show result */
+
+            debugResult.hidden =
+                false;
+
+
+            /* Hide answer initially */
+
+            correctAnswer.hidden =
+                true;
+
+
+            showAnswerButton.hidden =
+                false;
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Could not connect to the server."
+            );
+
+        }
+
+    }
+);
+
+
+
+/* =========================================================
+   SHOW CORRECT ANSWER
+========================================================= */
+
+showAnswerButton.addEventListener(
+    "click",
+    function () {
+
+        if (!debugData) {
+
+            return;
+
+        }
+
+
+        /* Correct code */
+
+        solutionCode.textContent =
+            debugData.solution ||
+            "";
+
+
+        /* Explanation */
+
+        solutionExplanation.textContent =
+            debugData.solution_explanation ||
+            "";
+
+
+        /* Show answer */
+
+        correctAnswer.hidden =
+            false;
+
+
+        /* Hide button */
+
+        showAnswerButton.hidden =
+            true;
+
+    }
+);
+
+
+
+/* =========================================================
+   SAVE MISTAKE
+========================================================= */
+
+saveMistakeButton.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            !lastRun.code ||
+            !debugData
+        ) {
+
+            return;
+
+        }
+
+
+        /* -------------------------------------------------
+           Flask expects:
+
+           mistake
+           thought
+           correction
+           why
+        ------------------------------------------------- */
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "mistake",
+            lastRun.output
+        );
+
+
+        formData.append(
+            "thought",
+            document.getElementById(
+                "thought"
+            ).value
+        );
+
+
+        formData.append(
+            "correction",
+            debugData.explanation ||
+            ""
+        );
+
+
+        formData.append(
+            "why",
+            debugData.why ||
+            ""
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    window.location.pathname + "/mistake",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (response.ok) {
+
+                saveStatus.textContent =
+                    data.message ||
+                    "Mistake saved ✓";
+
+            }
+
+            else {
+
+                saveStatus.textContent =
+                    data.error ||
+                    "Could not save mistake.";
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+
+            saveStatus.textContent =
+                "Could not connect to the server.";
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

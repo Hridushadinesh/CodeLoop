@@ -1,0 +1,566 @@
+{% extends "base.html" %}
+{% block title %}{{ topic.name }} | CodeLoop{% endblock %}
+
+{% block content %}
+
+<style>
+.reference-section {
+    margin: 34px 0 38px;
+    padding: 30px;
+    border: 1px solid #e2e5ec;
+    border-radius: 22px;
+    background: #ffffff;
+}
+
+.reference-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.reference-header .eyebrow {
+    margin-bottom: 8px;
+}
+
+.reference-header h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.reference-header p:not(.eyebrow) {
+    margin: 0;
+    max-width: 720px;
+    color: #667085;
+    line-height: 1.65;
+}
+
+.reference-count {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border: 1px solid #e2e5ec;
+    border-radius: 999px;
+    background: #f7f8fb;
+    color: #667085;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.reference-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.reference-card {
+    display: block;
+    min-height: 150px;
+    padding: 22px;
+    border: 1px solid #e2e5ec;
+    border-radius: 16px;
+    background: #fbfcfe;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.reference-card:hover {
+    transform: translateY(-2px);
+    border-color: #cfd3ff;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(31, 35, 45, 0.07);
+}
+
+.reference-card-content h3 {
+    margin: 0 0 9px;
+    font-size: 18px;
+    line-height: 1.35;
+}
+
+.reference-card-content p {
+    margin: 0 0 18px;
+    color: #667085;
+    line-height: 1.55;
+    font-size: 14px;
+}
+
+.reference-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #5b50e6;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media (max-width: 760px) {
+    .reference-section {
+        padding: 22px;
+        border-radius: 18px;
+    }
+
+    .reference-header {
+        display: block;
+    }
+
+    .reference-count {
+        display: inline-block;
+        margin-top: 14px;
+    }
+
+    .reference-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<style>
+.program-input-panel {
+    margin: 18px 0 20px;
+    padding: 18px 20px;
+    border: 1px solid #e2e5ec;
+    border-radius: 14px;
+    background: #fbfcfe;
+}
+
+.program-input-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.program-input-heading .eyebrow {
+    margin-bottom: 5px;
+}
+
+.program-input-heading p:not(.eyebrow) {
+    margin: 0;
+    color: #667085;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.program-input-heading > span {
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #f0f1f6;
+    color: #667085;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.program-input {
+    width: 100%;
+    min-height: 58px;
+    padding: 12px 14px;
+    border: 1px solid #d9dce5;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #20222a;
+    font: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.program-input:focus {
+    outline: none;
+    border-color: #6256e8;
+    box-shadow: 0 0 0 3px rgba(98, 86, 232, 0.10);
+}
+
+@media (max-width: 600px) {
+    .program-input-heading {
+        display: block;
+    }
+
+    .program-input-heading > span {
+        display: inline-block;
+        margin-top: 8px;
+    }
+}
+.correct-answer-section {
+    margin-top: 24px;
+}
+
+.correct-answer-section .secondary-button {
+    margin-bottom: 18px;
+}
+
+.correct-answer {
+    padding: 20px;
+    border: 1px solid #e2e5ec;
+    border-radius: 14px;
+    background: #fbfcfe;
+}
+
+.correct-answer pre {
+    margin: 14px 0 20px;
+    overflow-x: auto;
+}
+
+.correct-answer code {
+    display: block;
+    white-space: pre-wrap;
+}
+
+</style>
+
+<a class="back-link" href="{{ url_for('topics', path_id=topic.path_id) }}">← {{ topic.path_name }}</a>
+
+<section class="topic-detail-head">
+    <div>
+        <p class="eyebrow">{{ topic.section }}</p>
+        <h1>{{ topic.name }}</h1>
+        <p>Learn the idea first. When you're ready, practice it and use the debugger to understand what goes wrong.</p>
+    </div>
+
+    <div class="status-control">
+        <span class="status-dot status-{{ topic.status }}"></span>
+        <form method="post" action="{{ url_for('update_topic_status', topic_id=topic.id) }}">
+            <select name="status" onchange="this.form.submit()">
+                <option value="not_started" {% if topic.status == 'not_started' %}selected{% endif %}>Not started</option>
+                <option value="learning" {% if topic.status == 'learning' %}selected{% endif %}>Learning</option>
+                <option value="completed" {% if topic.status == 'completed' %}selected{% endif %}>Completed</option>
+            </select>
+        </form>
+    </div>
+</section>
+
+<section class="learning-grid">
+    <article class="learning-card">
+        <p class="eyebrow">UNDERSTAND IT</p>
+        <h2>In simple terms</h2>
+        <p>{{ topic.explanation or "No explanation has been added for this topic yet." }}</p>
+    </article>
+
+    <article class="learning-card">
+        <p class="eyebrow">SEE IT</p>
+        <h2>Example</h2>
+        <pre><code>{{ topic.example or "# No example added yet." }}</code></pre>
+    </article>
+</section>
+
+{# ---------------------------------------------------------
+   Reference Tutorials
+   --------------------------------------------------------- #}
+{% if reference_tutorials %}
+<section class="reference-section">
+    <div class="reference-header">
+        <div>
+            <p class="eyebrow">REFERENCE TUTORIALS</p>
+            <h2>Need to learn more?</h2>
+            <p>Useful external tutorials for important parts of {{ topic.name }} that are not covered in detail above.</p>
+        </div>
+        <span class="reference-count">{{ reference_tutorials|length }} references</span>
+    </div>
+
+    <div class="reference-grid">
+        {% for tutorial in reference_tutorials %}
+        <a class="reference-card" href="{{ tutorial.url }}" target="_blank" rel="noopener noreferrer">
+            <div class="reference-card-content">
+                <h3>{{ tutorial.title }}</h3>
+                <p>{{ tutorial.description }}</p>
+                <span class="reference-link">External reference · GeeksforGeeks ↗</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if practice %}
+<section class="practice-panel practice-launcher">
+    <div class="practice-heading">
+        <div>
+            <p class="eyebrow">READY TO PRACTICE?</p>
+            <h2>{{ practice.prompt }}</h2>
+            <p>Try it yourself.</p>
+        </div>
+        <span class="practice-badge">Python</span>
+    </div>
+
+    <button class="primary-button" type="button" id="startPractice">Start practice <span>→</span></button>
+</section>
+
+<section class="practice-panel practice-workspace" id="practiceWorkspace" hidden>
+    <div class="practice-heading">
+        <div>
+            <p class="eyebrow">PRACTICE</p>
+            <h2>Work it out yourself</h2>
+            <p>Run your code to see only what your program actually produces.</p>
+        </div>
+        <span class="practice-badge">No solution shown</span>
+    </div>
+
+    <textarea id="code-editor" class="code-editor" spellcheck="false" placeholder="# Write your code here..."></textarea>
+
+    <div class="program-input-panel">
+        <div class="program-input-heading">
+            <div>
+                <p class="eyebrow">PROGRAM INPUT</p>
+                <p>If your code uses <code>input()</code>, enter the value here before running it.</p>
+            </div>
+            <span>Optional</span>
+        </div>
+        <textarea
+            id="program-input"
+            class="program-input"
+            spellcheck="false"
+            placeholder="Example: Hridusha"
+        ></textarea>
+    </div>
+
+    <div class="editor-actions">
+        <button class="primary-button" type="button" onclick="runCode()">Run code <span>▶</span></button>
+        <span id="run-result" class="run-result" role="status"></span>
+    </div>
+
+    <pre id="output" class="output-box"><code>Run your code to see the result.</code></pre>
+
+    <section class="debug-reflection" id="debugReflection" hidden>
+        <div class="debug-reflection-heading">
+            <div>
+                <p class="eyebrow">DEBUG YOUR THINKING</p>
+                <h2>Before looking for an answer, explain your thinking.</h2>
+                <p>There is no need to know the correction yet. Your expectation helps identify the mental model behind the mistake.</p>
+            </div>
+        </div>
+
+        <form id="debugForm">
+            <label for="thought">What were you trying to do?</label>
+            <textarea id="thought" name="thought" placeholder="For example: I was trying to add another item to my list." required></textarea>
+
+            <label for="expected-thought">What did you expect to happen?</label>
+            <textarea id="expected-thought" name="expected_thought" placeholder="Describe what you thought Python would do." required></textarea>
+
+            <button class="primary-button" type="submit">Check my thinking <span>→</span></button>
+        </form>
+    </section>
+
+    <section class="debug-result" id="debugResult" hidden>
+        <div class="debug-result-header">
+            <span class="debug-result-icon">?</span>
+            <div>
+                <p class="eyebrow">WHAT WE FOUND</p>
+                <h2 id="debugTitle"></h2>
+            </div>
+        </div>
+
+        <p id="debugExplanation"></p>
+
+        <div class="debug-why">
+            <strong>Why this happened</strong>
+            <p id="debugWhy"></p>
+        </div>
+
+        <div class="debug-concept">
+            <span>Concept to review</span>
+            <strong id="debugConcept"></strong>
+        </div>
+        <div class="correct-answer-section">
+
+    <button
+        class="secondary-button"
+        type="button"
+        id="showAnswerButton"
+    >
+        Show correct answer →
+    </button>
+
+    <div id="correctAnswer" class="correct-answer" hidden>
+
+        <p class="eyebrow">CORRECT ANSWER</p>
+
+        <pre><code id="solutionCode"></code></pre>
+
+        <div class="debug-why">
+            <strong>Why this is correct</strong>
+            <p id="solutionExplanation"></p>
+        </div>
+
+    </div>
+
+</div>
+        <button class="secondary-button" type="button" id="saveDebugMistake">Save this mistake</button>
+        <span class="save-status" id="saveStatus" role="status"></span>
+    </section>
+</section>
+{% else %}
+<section class="practice-panel">
+    <p class="eyebrow">PRACTICE</p>
+    <h2>This topic doesn't have a coding exercise yet.</h2>
+    <p>You can still use the example above to practice manually.</p>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if practice %}
+<script>
+let lastRun = { code: "", output: "" };
+let debugData = null;
+
+const workspace = document.querySelector("#practiceWorkspace");
+const reflection = document.querySelector("#debugReflection");
+const debugResult = document.querySelector("#debugResult");
+
+function showReflection() {
+    reflection.hidden = false;
+    debugResult.hidden = true;
+    reflection.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+async function runCode() {
+    const output = document.querySelector("#output code");
+    const result = document.querySelector("#run-result");
+    const code = document.querySelector("#code-editor").value;
+
+    result.textContent = "Running...";
+    result.className = "run-result";
+    reflection.hidden = true;
+    debugResult.hidden = true;
+
+    try {
+        const response = await fetch(
+            "{{ url_for('run_code', topic_id=topic.id) }}",
+            {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: new URLSearchParams({
+                    code,
+                    program_input: document.querySelector("#program-input").value
+                })
+            }
+        );
+
+        const data = await response.json();
+        output.textContent = data.output || data.error || "No output.";
+
+        if (!response.ok) {
+            result.textContent = "Code needs attention";
+            result.classList.add("error");
+            lastRun = { code, output: data.error || "" };
+            showReflection();
+        } else if (data.passed) {
+            result.textContent = "Practice passed ✓";
+            result.classList.add("passed");
+            lastRun = { code, output: data.output || "" };
+        } else {
+            result.textContent = "Code ran — compare the result with the task";
+            lastRun = { code, output: data.output || "" };
+            showReflection();
+        }
+    } catch (error) {
+        output.textContent = "Could not run the code.";
+        result.textContent = "Connection error";
+        result.classList.add("error");
+    }
+}
+
+document.querySelector("#startPractice").addEventListener("click", () => {
+    workspace.hidden = false;
+    document.querySelector("#code-editor").focus();
+    workspace.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+document.querySelector("#debugForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const form = new FormData(event.currentTarget);
+    form.append("code", lastRun.code);
+    form.append("output", lastRun.output);
+
+    const button = event.currentTarget.querySelector("button");
+    button.disabled = true;
+    button.textContent = "Thinking...";
+
+    try {
+        const response = await fetch(
+            "{{ url_for('analyze_mistake', topic_id=topic.id) }}",
+            { method: "POST", body: form }
+        );
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.error || "Could not analyze the mistake.");
+            return;
+        }
+
+        debugData = data;
+        document.querySelector("#debugTitle").textContent = data.title;
+        document.querySelector("#debugExplanation").textContent = data.explanation;
+        document.querySelector("#debugWhy").textContent = data.why;
+        document.querySelector("#debugConcept").textContent = data.concept;
+
+        document.querySelector("#solutionCode").textContent =
+            data.solution || "";
+
+        document.querySelector("#solutionExplanation").textContent =
+            data.solution_explanation || "";
+
+        document.querySelector("#correctAnswer").hidden = true;
+
+        document.querySelector("#showAnswerButton").hidden =
+            !data.solution;
+        
+        document.querySelector("#saveStatus").textContent = "";
+        debugResult.hidden = false;
+        debugResult.scrollIntoView({ behavior: "smooth", block: "center" });
+    } finally {
+        button.disabled = false;
+        button.innerHTML = "Check my thinking <span>→</span>";
+    }
+});
+
+document.querySelector("#showAnswerButton").addEventListener("click", () => {
+    const answer = document.querySelector("#correctAnswer");
+    const button = document.querySelector("#showAnswerButton");
+
+    answer.hidden = false;
+    button.hidden = true;
+
+    answer.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+});
+
+document.querySelector("#saveDebugMistake").addEventListener("click", async () => {
+    if (!debugData) return;
+
+    const status = document.querySelector("#saveStatus");
+    const button = document.querySelector("#saveDebugMistake");
+    button.disabled = true;
+    status.textContent = "Saving...";
+
+    const body = new URLSearchParams({
+        mistake: debugData.mistake || lastRun.output,
+        thought: debugData.thought,
+        correction: debugData.correction,
+        why: debugData.why
+    });
+
+    const response = await fetch(
+        "{{ url_for('save_mistake', topic_id=topic.id) }}",
+        {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body
+        }
+    );
+
+    if (response.ok) {
+        status.textContent = "Saved to My Mistakes ✓";
+        button.textContent = "Saved";
+    } else {
+        status.textContent = "Could not save this mistake.";
+        button.disabled = false;
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

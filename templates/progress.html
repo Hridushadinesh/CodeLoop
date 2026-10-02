@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Progress | CodeLoop{% endblock %}
+
+{% block content %}
+<div class="page-intro">
+    <p class="eyebrow">PROGRESS</p>
+    <h1>See how far you've come.</h1>
+    <p>Your progress is calculated from the topics you've completed across your learning paths.</p>
+</div>
+
+<section class="progress-overview">
+    <div class="big-progress">
+        <span>Overall completion</span>
+        <strong>{{ overall_progress }}%</strong>
+        <div class="progress-track large"><div class="progress-fill" style="width: {{ overall_progress }}%"></div></div>
+    </div>
+
+    <div class="progress-stat">
+        <span>Completed</span>
+        <strong>{{ totals.completed_count }}</strong>
+        <small>topics</small>
+    </div>
+
+    <div class="progress-stat">
+        <span>Learning</span>
+        <strong>{{ totals.learning_count }}</strong>
+        <small>topics</small>
+    </div>
+</section>
+
+<div class="section-title-row">
+    <div>
+        <p class="eyebrow">NEXT UP</p>
+        <h2>Topics to work on</h2>
+    </div>
+</div>
+
+<div class="topic-list simple-list">
+{% for topic in weak_topics %}
+    <a class="topic-row static-row" href="{{ url_for('topic_detail', topic_id=topic.id) }}">
+        <span class="status-dot status-{{ topic.status }}"></span>
+        <div>
+            <strong>{{ topic.name }}</strong>
+            <span>{{ topic.path_name }} · {{ topic.status.replace('_', ' ')|title }}</span>
+        </div>
+        <span class="arrow">→</span>
+    </a>
+{% else %}
+    <div class="empty-state">
+        <h2>Everything is completed.</h2>
+        <p>You've finished every topic currently in your learning paths.</p>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}My Mistakes | CodeLoop{% endblock %}
+
+{% block content %}
+<div class="page-intro">
+    <p class="eyebrow">REVIEW LOOP</p>
+    <h1>My mistakes</h1>
+    <p>Mistakes are saved learning material. Revisit them until the correction feels natural.</p>
+</div>
+
+<section class="mistake-list">
+{% for item in mistakes %}
+    <article class="mistake-card">
+        <div class="mistake-card-heading">
+            <span class="tag">{{ item.topic_name }}</span>
+            <time>{{ item.created_at[:10] }}</time>
+        </div>
+
+        <div class="mistake-grid">
+            <div><strong>My mistake</strong><pre><code>{{ item.mistake }}</code></pre></div>
+            <div><strong>What I thought</strong><p>{{ item.thought }}</p></div>
+            <div><strong>Correct approach</strong><pre><code>{{ item.correction }}</code></pre></div>
+            <div><strong>Why</strong><p>{{ item.why }}</p></div>
+        </div>
+
+        <a class="text-link" href="{{ url_for('topic_detail', topic_id=item.topic_id) }}">Review {{ item.topic_name }} →</a>
+    </article>
+{% else %}
+    <div class="empty-state">
+        <div class="empty-icon">!</div>
+        <h2>No mistakes saved yet.</h2>
+        <p>Open a topic and record the first thing that surprised you.</p>
+        <a class="primary-button" href="{{ url_for('paths') }}">Open learning path</a>
+    </div>
+{% endfor %}
+</section>
+{% endblock %}
